@@ -11,7 +11,7 @@ var ws = binary()
     .word32ls('header.compressed')
     .word32ls('header.weight_index')
     .word32ls('header.ncases')
-    .word64le('header.bias')
+    .buffer('header.bias', 8)
     .buffer('header.creation_date', 9)
     .buffer('header.creation_time', 8)
     .buffer('header.file_label', 64)
@@ -22,7 +22,14 @@ var ws = binary()
       for (var key in header) {
         console.log(key, ':\t', typeof header[key] !== 'number'? header[key].toString(): header[key]);
       };
+      var bias = header.bias.readDoubleLE();
+
+      console.log(bias, typeof bias);
     })
 ;
+
+function parse_header () {
+
+}
 
 sav.pipe(ws);

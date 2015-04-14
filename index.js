@@ -1,12 +1,8 @@
-var fs = require('fs');
+#!/usr/bin/env node
 
-fs.open("accidents.sav", 'r', function(status, fd) {
-    if (status) {
-        console.log(status.message);
-        return;
-    }
-    var buffer = new Buffer(1000);
-    fs.read(fd, buffer, 0, 1000, 0, function(err, num) {
-        console.log(buffer.toString('utf-8', 0, num));
-    });
-});
+var header = require('./lib/header');
+
+var fs = require('fs');
+var sav = fs.createReadStream('./examples/accidents.sav');
+
+sav.pipe(header);
