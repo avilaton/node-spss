@@ -73,22 +73,22 @@ parser.tap('remaining_dict', function () {
           var round_label_length = Math.ceil(this.vars.label_length/8.0) * 8;
           this.string('label', round_label_length);
         })
-        this.int32('rec_type_2').tap(function () {
-          console.log(this.vars.rec_type_2);
-          var k = 1;
+        // this.int32('rec_type_2').tap(function () {
+        //   console.log(this.vars.rec_type_2);
+        //   var k = 1;
 
-          this.int32('rec_type_count').loop('dontknow', function (end) {
-            this.int32('whoknows');
-            this.int32('whoknows');
-            this.int32('whoknows');
-            console.log('rectypecount', this.vars.rec_type_count);
+        //   this.int32('rec_type_count').loop('dontknow', function (end) {
+        //     this.int32('whoknows');
+        //     this.int32('whoknows');
+        //     this.int32('whoknows');
+        //     console.log('rectypecount', this.vars.rec_type_count);
 
-            console.log(k);
-            if (k++ == this.vars.rec_type_count) {
-              end();
-            }
-          })
-        });
+        //     console.log(k);
+        //     if (k++ == this.vars.rec_type_count) {
+        //       end();
+        //     }
+        //   })
+        // });
         // .buffer('ignore',8);
 
         if (j++ == this.vars.count) {
