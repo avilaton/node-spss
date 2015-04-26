@@ -2,14 +2,15 @@ var test = require('tape');
 var fs = require('fs');
 var sav = fs.createReadStream('./examples/accidents.sav');
 
-var header_parser = require('../').header;
+var parser = require('../index');
 
 test('Header parser tests', function (t) {
 
-  var parser = sav.pipe(header_parser);
+  var result = sav.pipe(parser);
 
-  parser.tap(function () {
-    var header = this.vars;
+  result.tap(function () {
+    var header = this.vars.header;
+
     t.equal(header.rec_type, '$FL2', 'Record type should always match $FL2');
     t.equal(header.prod_name,
       '@(#) SPSS DATA FILE MS Windows Release 13.0 spssio32.dll    ',
@@ -27,7 +28,7 @@ test('Header parser tests', function (t) {
       'File label is a long empty string');
     t.is(Buffer.compare(header.padding, new Buffer([0,0,0])), 0,
       'Padding is a length 3 buffer of zeros');
+    t.end();
   });
 
-  t.end();
 });
