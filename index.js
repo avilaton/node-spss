@@ -63,47 +63,49 @@ parser.loop('variables', function (end) {
 var count;
 
 parser.tap('remaining_dict', function () {
-  this.int32('rec_type').tap(function () {
+  this.int32('rec_type');
+
+  this.tap('value_label_records', function () {
     if (this.vars.rec_type === 3) {
       var j = 1;
 
-      this.int32('count').loop('nums', function (end) {
-        this.doublele('value');
-        this.int8('label_length').tap(function () {
-          var round_label_length = Math.ceil(this.vars.label_length/8.0) * 8;
+      this.int32('count').loop('value_labels', function (end) {
+        this.doublele('value', 8);
+        this.uint8('label_length');
+        this.tap(function () {
+          var round_label_length,
+            tmp_mod = (this.vars.label_length+1)  % 8;
+
+          if (tmp_mod !== 0) {
+            round_label_length = this.vars.label_length + 8 - tmp_mod;
+          } else {
+            round_label_length = this.vars.label_length;
+          }
+
           this.string('label', round_label_length);
-        })
-        // this.int32('rec_type_2').tap(function () {
-        //   console.log(this.vars.rec_type_2);
-        //   var k = 1;
-
-        //   this.int32('rec_type_count').loop('dontknow', function (end) {
-        //     this.int32('whoknows');
-        //     this.int32('whoknows');
-        //     this.int32('whoknows');
-        //     console.log('rectypecount', this.vars.rec_type_count);
-
-        //     console.log(k);
-        //     if (k++ == this.vars.rec_type_count) {
-        //       end();
-        //     }
-        //   })
-        // });
-        // .buffer('ignore',8);
+        });
 
         if (j++ == this.vars.count) {
           end();
         }
-      })
-    } else if (this.rec_type === 6) {
-
-    } else if (this.rec_type === 7) {
-
-    } else if (this.rec_type === 999) {
-
-    };
+      });
+  }
   });
-})
+
+  this.tap('value_label_variables', function () {
+    this.int32('rec_type_2');
+    this.int32('var_count');
+  })
+
+
+    if (this.vars.rec_type === 6) {
+
+    } else if (this.vars.rec_type === 7) {
+
+    } else if (this.vars.rec_type === 999) {
+
+    }
+});
 
 
 parser.tap(function () {
